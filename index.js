@@ -8,7 +8,7 @@ const {
   streamChannelId,
   streamVideoUrl,
   azkarChannelId,
-  azkarTimeInMinutes
+  azkarTimeInMinutes,
 } = require("./config.json");
 const azkar = require("./azkar.json");
 const { DisTube } = require("distube");
@@ -83,18 +83,18 @@ client.on("ready", async () => {
             textChannel: message.channel,
           })
           .then(async () => {
+            msg = message;
             distube.seek(message, progressData);
+            setInterval(async () => {
+              let queue = distube.getQueue(msg);
+              let song = queue.songs[0];
+              let progress = queue.currentTime;
+              if (progress == 0) return;
+              db.set(`streamProg_${streamChannel.guild.id}`, progress);
+              console.log(progress);
+            }, 100);
           });
-        msg = message;
       });
-    setInterval(async () => {
-      let queue = distube.getQueue(msg);
-      let song = queue.songs[0];
-      let progress = queue.currentTime;
-      if (progress == 0) return;
-      db.set(`streamProg_${streamChannel.guild.id}`, progress);
-      console.log(progress);
-    }, 100);
   }
 
   let azkarChannel = client.channels.cache.get(azkarChannelId);
