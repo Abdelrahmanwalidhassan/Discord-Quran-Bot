@@ -1,9 +1,14 @@
-const app = require('express')();
-app.get('/', (req, res) => res.send('Hello Express app!'));
+const app = require("express")();
+app.get("/", (req, res) => res.send("Hello Express app!"));
 app.listen(3000);
 
 const chalk = require("chalk");
-const { Client, ChannelType, ActivityType } = require("discord.js");
+const {
+  Client,
+  ChannelType,
+  ActivityType,
+  EmbedBuilder,
+} = require("discord.js");
 // const loadDistube = require("./assets/distube");
 const db = require("pro.db");
 require("dotenv").config();
@@ -15,6 +20,7 @@ const {
   azkarTimeInMinutes,
 } = require("./config.json");
 const azkar = require("./azkar.json");
+const countdown = require("countdown");
 const { DisTube } = require("distube");
 const { YtDlpPlugin } = require("@distube/yt-dlp");
 
@@ -96,7 +102,7 @@ client.on("ready", async () => {
               if (progress == 0) return;
               db.set(`streamProg_${streamChannel.guild.id}`, progress);
               console.log(progress);
-            }, 100);
+            }, 500);
           });
       });
   }
@@ -109,7 +115,6 @@ client.on("ready", async () => {
 
   setInterval(async () => {
     let zekr = azkar[Math.floor(Math.random() * azkar.length)];
-
     azkarChannel.send({ content: `${zekr}` });
   }, azkarTimeInMinutes * 60 * 1000);
 });
