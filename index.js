@@ -7,7 +7,10 @@ const {
   statusChannelId,
   streamChannelId,
   streamVideoUrl,
+  azkarChannelId,
+  azkarTimeInMinutes
 } = require("./config.json");
+const azkar = require("./azkar.json");
 const { DisTube } = require("distube");
 const { YtDlpPlugin } = require("@distube/yt-dlp");
 
@@ -74,12 +77,14 @@ client.on("ready", async () => {
         content: `🎶 **| The bot is online, Starting the player soon.**`,
       })
       .then(async (message) => {
-        distube.play(streamChannel, streamVideoUrl, {
-          message: message,
-          textChannel: message.channel,
-        }).then(async () => {
-          distube.seek(message, progressData);
-        });
+        distube
+          .play(streamChannel, streamVideoUrl, {
+            message: message,
+            textChannel: message.channel,
+          })
+          .then(async () => {
+            distube.seek(message, progressData);
+          });
         msg = message;
       });
     setInterval(async () => {
@@ -91,4 +96,16 @@ client.on("ready", async () => {
       console.log(progress);
     }, 100);
   }
+
+  let azkarChannel = client.channels.cache.get(azkarChannelId);
+  if (!azkarChannel)
+    return console.log(
+      chalk.bold.red(`⛔ | Please provide a text based channel.`)
+    );
+
+  setInterval(async () => {
+    let zekr = azkar[Math.floor(Math.random() * azkar.length)];
+
+    azkarChannel.send({ content: `${zekr}` });
+  }, azkarTimeInMinutes * 60 * 1000);
 });
