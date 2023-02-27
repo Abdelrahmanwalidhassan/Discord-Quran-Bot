@@ -77,10 +77,9 @@ client.on("ready", async () => {
         distube.play(streamChannel, streamVideoUrl, {
           message: message,
           textChannel: message.channel,
-        });
-        setTimeout(async () => {
+        }).then(async () => {
           distube.seek(message, progressData);
-        }, 60000);
+        });
 
         msg = message;
       });
@@ -88,6 +87,7 @@ client.on("ready", async () => {
       let queue = distube.getQueue(msg);
       let song = queue.songs[0];
       let progress = queue.currentTime;
+      if (progress == 0) return;
       db.set(`streamProg_${streamChannel.guild.id}`, progress);
       console.log(progress);
     }, 30000);
