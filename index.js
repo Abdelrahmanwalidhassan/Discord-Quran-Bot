@@ -80,7 +80,6 @@ client.on("ready", async () => {
         }).then(async () => {
           distube.seek(message, progressData);
         });
-
         msg = message;
       });
     setInterval(async () => {
@@ -90,6 +89,6 @@ client.on("ready", async () => {
       if (progress == 0) return;
       db.set(`streamProg_${streamChannel.guild.id}`, progress);
       console.log(progress);
-    }, 30000);
+    }, 100);
   }
 });
