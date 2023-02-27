@@ -1,3 +1,7 @@
+const app = require('express')();
+app.get('/', (req, res) => res.send('Hello Express app!'));
+app.listen(3000);
+
 const chalk = require("chalk");
 const { Client, ChannelType, ActivityType } = require("discord.js");
 // const loadDistube = require("./assets/distube");
