@@ -81,7 +81,7 @@ client.on("ready", async () => {
   if (streamChannel) {
     let progressData = await db.get(`streamProg_${streamChannel.guild.id}`);
     if (!progressData) progressData = 0;
-    let msg;
+    // let msg;
     statusChannel
       .send({
         content: `🎶 **| The bot is online, Starting the player soon.**`,
@@ -93,15 +93,21 @@ client.on("ready", async () => {
             textChannel: message.channel,
           })
           .then(async () => {
-            msg = message;
+            // msg = message;
             distube.seek(message, progressData);
             setInterval(async () => {
-              let queue = distube.getQueue(msg);
+              let queue = distube.getQueue(message);
               let song = queue.songs[0];
               let progress = queue.currentTime;
               if (progress == 0) return;
               db.set(`streamProg_${streamChannel.guild.id}`, progress);
-              console.log(progress);
+              // console.log(progress);
+              if (song.duration == progress) {
+                distube.play(streamChannel, streamVideoUrl, {
+                  message: message,
+                  textChannel: message.channel,
+                });
+              }
             }, 500);
           });
       });
@@ -114,7 +120,12 @@ client.on("ready", async () => {
     );
 
   setInterval(async () => {
-    let zekr = azkar[Math.floor(Math.random() * azkar.length)];
-    azkarChannel.send({ content: `${zekr}` });
-  }, azkarTimeInMinutes * 60 * 1000);
+    let lastSent = db.get(`azkarLastSent_${azkarChannel.guild.id}`);
+    if (!lastSent) lastSent = 0;
+    if (azkarTimeInMinutes * 60 * 1000 - (Date.now() - lastSent) < 0) {
+      let zekr = azkar[Math.floor(Math.random() * azkar.length)];
+      azkarChannel.send({ content: `${zekr}` });
+      db.set(`azkarLastSent_${azkarChannel.guild.id}`, Date.now());
+    }
+  }, 500);
 });
