@@ -1,13 +1,9 @@
 const app = require("express")();
-app.get("/", (req, res) => res.sendFile(__dirname + 'index.html'));
+app.get("/", (req, res) => res.sendFile(__dirname + "index.html"));
 app.listen(3000);
 
 const chalk = require("chalk");
-const {
-  Client,
-  ChannelType,
-  ActivityType,
-} = require("discord.js");
+const { Client, ChannelType, ActivityType } = require("discord.js");
 const db = require("pro.db");
 require("dotenv").config();
 const {
