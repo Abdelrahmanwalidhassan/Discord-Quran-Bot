@@ -8,7 +8,6 @@ const {
   ChannelType,
   ActivityType,
 } = require("discord.js");
-// const loadDistube = require("./assets/distube");
 const db = require("pro.db");
 require("dotenv").config();
 const {
@@ -28,7 +27,6 @@ const client = new Client({
   allowedMentions: { repliedUser: false },
 });
 
-// const distube = loadDistube(client);
 const distube = new DisTube(client, {
   searchSongs: 5,
   searchCooldown: 30,
